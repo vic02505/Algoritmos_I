@@ -1,0 +1,11 @@
+Todos los algoritmos hechos a continuación se hacen suponiendo que el registro logicos de los archivos con los que
+se opera es el siguiente:
+	
+	#define MAX 100
+
+	typdef strcut estudiante{
+		int padron;
+		char dni[MAX];                    //Con puntos.
+		char celular[MAX];               //Código de país + código de area + resto del número.
+		char fecha_de_nacimiento[MAX];  //Día-mes-año (Todo en forma númerica).
+	}

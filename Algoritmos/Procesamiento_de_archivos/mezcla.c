@@ -1,0 +1,92 @@
+/*
+*-Procesamiento de archivos: Mezcla entre dos archivos.
+*-Autor: Víctor Zacarías.
+*-Ultima actualización: 2/8/2021.
+*/
+
+/*
+-Contexto: Trabajas en el Siu Guaraní xd.
+
+EL Curso 10 de algoritmos y porgramación 1 acaba de aceptar condiconales a su curso, se necesita actualizar
+la información de sus estudiantes, esto ultimo sabiendo que ahora la cantidad de estudiantes anotados al curso es:
+estudiantes_regulares + estudaintes_condicionales.
+
+-Descripción: Se tienen dos archivos con información de estudiantes, uno con condicionales a una materia, otra con no 
+condiconales anotados a la misma materia. Ambos archivos están ordenados por padrón en forma ascendente.
+
+-Objetivo: Obetener un tercer archivo que tenga la información de los dos anteriores.
+*/
+
+#define MAX 100
+
+#define estudiantes_condicionales "estudiantes_condicionales.dat"
+#define estudiantes_regulares "estudiantes_regulares.dat"
+#define estudiantes_definitivos "estudiantes_definitivos.dat"
+
+typedef struct estudiante{
+	char nombre_completo[MAX];
+	char fecha_de_nacimiento[MAX]; //d-m-a (todo númericamente).
+	char dni[MAX]; //con puntos.
+	int padron;
+}estudiante_t;
+
+
+void realizar_mezcla(char ruta_condicionales[MAX], char ruta_regulares[MAX], char ruta_definitivo[MAX]){
+
+	estudiante_t info_condicionales;
+	estudiante_t info_regulares;
+
+	//Apertura.
+	FILE* condicionales = fopen(ruta_condicionales, "r");
+	if(!condicionales){
+		printf("Error al arbrir el archivo '%s'\n", ruta_condicionales);
+		return;
+	}
+
+	FILE* regulares = fopen(ruta_regulares, "r");
+	if(!regulares){
+		printf("Error al arbir e archivo '%s'", ruta_regulares);
+		fclose(condicionales);
+		return;
+	}
+
+	FILE* definitivos = fopen(ruta_definitivos, "w");
+	if(!definitivos){
+		printf("Error al arbrir el archivo '%s'", ruta_definitivos);
+		fclose(condicionales);
+		fclose(regulares);
+		return;
+	}
+
+	//Operar.
+	fread(&info_condicionales, sizeof(estudiante_t), 1, condicionales);
+	fread(&info_regulares, sizeof(estudiante_t), 1, regulares);
+
+	while((!feof(condicionales)) && (!feof(regulares))){
+
+		if(info_condicionales.padron <= info_regulares.padron){
+			fwrite(&info_condicionales, sizeof(estudiante_t), 1, definitivos);
+			fread(&info_condicionales, sizeof(estudiante_t), 1, condicionales);
+		}
+		else{
+			fwrite(&info_regulares, sizeof(estudiante_t),1, definitivos);
+			fread(&info_regulares, sizeof(estudiante_t), 1 , regulares);
+		}
+	}
+
+	while(!feof(condicionales)){
+		fwrite(&info_condicionales, sizeof(estudiante_t), 1, definitivos);
+		fread(&info_condicionales, sizeof(estudiante_t), 1, condicionales);
+	}
+
+	while(!feof(regulares)){
+		fwrite(&info_regulares, sizeof(estudiante_t), 1, definitivos);
+		fread(&info_regulares, sizeof(estudiante_t), 1, regulares);
+	}
+
+	//Cierre.
+	fclose(condicionales);
+	fclose(regulares);
+	fclose(definitivos);
+}
+
