@@ -12,3 +12,5 @@ Se podrán encontrar 3 carpetas:
 Para el segundo trabajo práctico había que realizar un juego de consola simple. El objetivo era el de aplicar los temas vistos a lo
 largo de la materia para satisfacer cada uno de los requerimientos del juego (para tener más información se puede leer el enunciado del 
 TP).
+
+ Todos los trabajos están hechos en el lenguaje de programación C, se recomienda estar en un entorno Linux para ejecutarlos.
